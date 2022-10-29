@@ -20,14 +20,21 @@ namespace DAL.Concrete
         {
             throw new NotImplementedException();
         }
-        public OrderDTO UpdateOrder(OrderDTO order)
+        public OrderDTO UpdateOrder(OrderDTO newOrder)
         {
             using (var entities = new TestDB2022Entities2())
             {
-                var orderInDB = _mapper.Map<order>(order);
-                orderInDB.OrderID = order.OrderID;
-                entities.orders.Remove(orderInDB);
-                entities.orders.AddOrUpdate(orderInDB);
+                var orderInDB = _mapper.Map<order>(newOrder);
+                var orders = entities.orders.ToList();
+                for (int i = 0; i < orders.Count; i++)
+                {
+                    if(orders[i].OrderID== newOrder.OrderID)
+                    {
+                        orders[i]=_mapper.Map<order>(newOrder);
+                        entities.orders.AddOrUpdate(orders[i]);
+                        break;
+                    }
+                }
                 entities.SaveChanges();
                 return _mapper.Map<OrderDTO>(orderInDB);
             }
@@ -60,6 +67,31 @@ namespace DAL.Concrete
             {
                 var orders = entities.orders.ToList();
                 return _mapper.Map<List<OrderDTO>>(orders);
+            }
+        }
+        public OrderDTO DeleteOrder()
+        {
+            using (var entities = new TestDB2022Entities2())
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public OrderDTO DeleteOrder(OrderDTO oldOrder)
+        {
+            using (var entities = new TestDB2022Entities2())
+            { 
+                var deletedOrder = new OrderDTO();
+                foreach(order order  in entities.orders)
+                {
+                    if (order.OrderID == oldOrder.OrderID)
+                    {
+                        entities.orders.Remove(order);
+                        deletedOrder = _mapper.Map<OrderDTO>(order);
+                        break;
+                    }
+                }
+                entities.SaveChanges();
+                return deletedOrder;
             }
         }
     }

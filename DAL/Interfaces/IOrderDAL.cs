@@ -8,5 +8,6 @@ namespace DAL.Interfaces
         List<OrderDTO> GetOrders();
         OrderDTO CreateOrder();
         OrderDTO UpdateOrder();
+        OrderDTO DeleteOrder();
     }
 }

@@ -31,7 +31,8 @@ namespace PZ_Task1
                 Console.WriteLine("Type 'o' to list all orders");
                 Console.WriteLine("Type 's' to list all suppliers");
                 Console.WriteLine("Type 'a' to add new order");
-                Console.WriteLine("!!!!!Type 'u' to update order");
+                Console.WriteLine("Type 'u' to update order");
+                Console.WriteLine("Type 'd' to delete order");
                 Console.WriteLine("Type 'q' to exit");
                 char c = char.Parse(Console.ReadLine());
                 switch (c)
@@ -58,16 +59,18 @@ namespace PZ_Task1
                         }
                     case 'u':
                         {
+                            ListAllOrders();
                             Console.WriteLine("Enter order's ID");
-                            int index = int.Parse(Console.ReadLine()) - 1;
+                            int index = int.Parse(Console.ReadLine());
                             ChangeOrder(index);
                             break;
                         }
-                    case 'f':
+                    case 'd':
                         {
+                            ListAllOrders();
                             Console.WriteLine("Enter order's ID");
-                            int index = int.Parse(Console.ReadLine()) - 1;
-                            FindOrder(index);
+                            int index = int.Parse(Console.ReadLine());
+                            DeleteOrder(index);
                             break;
                         }
                     case 'q':
@@ -80,14 +83,32 @@ namespace PZ_Task1
             }
         }
 
+        private static void DeleteOrder(int index)
+        {
+            var oldOrder = FindOrder(index);
+            if (oldOrder != null)
+            {
+                var dal = new OrderDAL(Mapper);
+                dal.DeleteOrder(oldOrder);
+            }
+            else
+            {
+                Console.WriteLine("Order with this ID doesn't exist");
+            }
+
+        }
+
         private static OrderDTO FindOrder(int index)
         {
             var dal = new OrderDAL(Mapper);
             var orders = dal.GetOrders();
-            if (index < orders.Count)
+            foreach (var order in orders)
             {
-                Console.WriteLine($"OrderID: {orders[index].OrderID}\t ProductID: {orders[index].ProductID}\t SupplierID: {orders[index].SupplierID}\t Count: {orders[index].Count}");
-                return orders[index];
+                if (order.OrderID == index)
+                {
+                    return order;
+
+                }
             }
             return null;
         }
@@ -109,12 +130,16 @@ namespace PZ_Task1
                 c = int.Parse(Console.ReadLine());
                 var newOrder = new OrderDTO
                 {
+                    OrderID = order.OrderID,
                     ProductID = p,
                     SupplierID = s,
                     Count = c
                 };
-                order = dal.UpdateOrder(order);
-
+                dal.UpdateOrder(newOrder);
+            }
+            else
+            {
+                Console.WriteLine("Order with this ID doesn't exist");
             }
         }
 
