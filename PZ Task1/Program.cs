@@ -169,31 +169,36 @@ namespace PZ_Task1
         {
             var dal = new SupplierDAL(Mapper);
             var suppliers = dal.GetSuppliers();
+            Console.WriteLine("-----------------------------------------------------------");
             foreach (var o in suppliers)
             {
                 Console.WriteLine($"SupplierID: {o.SupplierID}\t SupplierName: {o.SupplierName}\t");
             }
+            Console.WriteLine("-----------------------------------------------------------\n");
         }
 
         private static void ListAllOrders()
         {
             var dal = new OrderDAL(Mapper);
             var orders = dal.GetOrders();
+            Console.WriteLine("-----------------------------------------------------------");
             foreach (var o in orders)
             {
                 Console.WriteLine($"OrderID: {o.OrderID}\t ProductID: {o.ProductID}\t SupplierID: {o.SupplierID}\t Count: {o.Count}");
             }
+            Console.WriteLine("-----------------------------------------------------------\n");
         }
 
         private static void ListAllProducts()
         {
             var dal = new ProductDAL(Mapper);
             var products = dal.GetProducts();
+            Console.WriteLine("-----------------------------------------------------------");
             foreach (var o in products)
             {
                 Console.WriteLine($"ProductID: {o.ProductID}\t ProductName: {o.ProductName}\t ProductCount: {o.ProductCount}");
             }
-
+            Console.WriteLine("-----------------------------------------------------------\n");
         }
     }
 }
